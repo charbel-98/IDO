@@ -1,0 +1,25 @@
+.nav {
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  width: 100%;
+}
+
+.logo {
+  margin-left: 35px;
+  width: 100px;
+  height: 60px;
+}
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+}
+.navContainer {
+  display: flex;
+  align-items: center;
+  margin-right: 50px;
+  gap: 2rem;
+}

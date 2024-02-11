@@ -1,0 +1,38 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f4f7fc;
+  overflow-x: hidden;
+}
+.container {
+  width: 100vw;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 32px;
+}
+.taskContainer {
+  display: flex;
+  /* flex-wrap: wrap; */
+  width: 100%;
+}
+.infoIcon {
+  margin-top: 8px;
+  margin-right: 52px;
+}
+.fixed {
+  position: sticky;
+  top: 0;
+  background-color: #f4f7fc;
+}
+.progressContainer {
+  display: flex;
+  align-items: center;
+  /* gap: 10px; */
+}
+.progressContainer > div {
+  margin-left: 34px;
+}
