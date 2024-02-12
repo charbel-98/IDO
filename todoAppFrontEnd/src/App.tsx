@@ -2,18 +2,26 @@ import { useState } from "react";
 import "./App.css";
 import { InfoIcon } from "./assets/Icons";
 import Header from "./components/header/Header";
-import TaskList from "./components/taskList/TaskList";
 import TodoListHeader from "./components/todoListHeader/TodoListHeader";
-import TaskProgress from "./components/UI/TaskProgress";
+import TaskProgress from "./components/tasks/tasks-children/TaskProgress";
+import Tasks from "./components/tasks/Tasks";
+
+import {
+  todoTasks,
+  doingTasks,
+  doneTasks,
+} from "./components/tasks/tasks-children/tasksData.js";
 
 function App() {
   const [headerIsShowing, setHeaderIsShowing] = useState(true);
+
   const closeHeader = () => {
     setHeaderIsShowing(false);
   };
   const openHeader = () => {
     setHeaderIsShowing(true);
   };
+
   return (
     <main>
       <div className={"fixed"}>
@@ -32,11 +40,7 @@ function App() {
           </div>
         </div>
       </div>
-      <div className="container">
-        <div className="taskContainer">
-          <TaskList />
-        </div>
-      </div>
+      <Tasks></Tasks>
     </main>
   );
 }
