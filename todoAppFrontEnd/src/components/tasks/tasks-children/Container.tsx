@@ -62,7 +62,12 @@ function Container({
           <TaskProgress listeners={listeners} type={column.id} />
           <div className={"splitter"}>
             {tasks.map((task) => (
-              <TaskCard key={task.id} task={task} updateTask={updateTask} />
+              <TaskCard
+                key={task.id}
+                task={task}
+                updateTask={updateTask}
+                isNewCard={task.content.title === ""}
+              />
             ))}
           </div>
         </SortableContext>

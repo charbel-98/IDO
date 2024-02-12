@@ -1,13 +1,14 @@
 import { useSortable } from "@dnd-kit/sortable";
-import classes from "./task.module.css";
+import classes from "./taskCard.module.css";
 import { CSS } from "@dnd-kit/utilities";
 import { TaskItem } from "../../../types";
 import { useState } from "react";
 interface Props {
   task: TaskItem;
+  isNewCard: boolean;
   updateTask: (id: string, title: string) => void;
 }
-function TaskCard({ task, updateTask }: Props) {
+function TaskCard({ task, updateTask, isNewCard }: Props) {
   const [mouseIsOver, setMouseIsOver] = useState(false);
   const [editMode, setEditMode] = useState(false);
 
@@ -43,6 +44,40 @@ function TaskCard({ task, updateTask }: Props) {
         style={style}
         className={`${classes.taskContainer}`}
       />
+    );
+  }
+  if (isNewCard) {
+    return (
+      <form
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        {...listeners}
+        className={`${classes.taskContainer} ${classes.newCard} ${classes.show}`}
+        onSubmit={(e) => {}}
+      >
+        <div className={`${classes.title}`}>
+          <input />
+        </div>
+        <div className={`${classes.taskPropsContainer}`}>
+          <div className={`${classes.propKey}`}>Category</div>
+          <div className={`${classes.propValue}`}>
+            <input type="text" />
+          </div>
+          <div className={`${classes.propKey}`}>Due Date</div>
+          <div className={`${classes.propValue}`}>
+            <input type="text" />
+          </div>
+          <div className={`${classes.propKey}`}>Estimate</div>
+          <div className={`${classes.propValue}`}>
+            <input type="text" />
+          </div>
+          <div className={`${classes.propKey}`}>Importance</div>
+          <div className={`${classes.propValue}  `}>
+            <input type="text" />
+          </div>
+        </div>
+      </form>
     );
   }
   if (editMode) {

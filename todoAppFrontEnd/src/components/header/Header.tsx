@@ -3,7 +3,12 @@ import classes from "./Header.module.css";
 import { MdOutlineAddCircleOutline } from "react-icons/md";
 import { IoSearchSharp } from "react-icons/io5";
 import avatar from "../../assets/Bitmap/Bitmap.png";
-const Header = () => {
+import { TaskItem } from "../../types";
+interface Props {
+  setTasks: React.Dispatch<React.SetStateAction<TaskItem[]>>;
+  nbTasks: number;
+}
+const Header = ({ setTasks, nbTasks }: Props) => {
   return (
     <nav className={` ${classes.nav}`}>
       <img src={logo} alt="logo" className={`${classes.logo}`} />
@@ -34,6 +39,7 @@ const Header = () => {
           </div>
         </div>
         <MdOutlineAddCircleOutline
+          onClick={addNewTask}
           size={24}
           style={{ fill: "url(#blue-gradient)" }}
         />
@@ -41,6 +47,24 @@ const Header = () => {
       </div>
     </nav>
   );
+  function addNewTask() {
+    //add new empty task to state
+    setTasks((prev) => [
+      {
+        id: nbTasks + 1 + "",
+        columnId: "todo",
+        content: {
+          title: "",
+          category: "",
+          dueDate: "",
+          estimate: "",
+          importance: "",
+          progress: "",
+        },
+      },
+      ...prev,
+    ]);
+  }
 };
 
 export default Header;

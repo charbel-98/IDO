@@ -85,3 +85,17 @@
   /*I want to also indent the cursor on focus*/
   padding-left: 14px;
 }
+
+.newCard {
+  animation: showNewCard 0.7s ease;
+  z-index: -1;
+}
+
+@keyframes showNewCard {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}

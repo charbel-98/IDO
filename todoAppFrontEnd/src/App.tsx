@@ -179,11 +179,9 @@ function App() {
       >
         <SortableContext items={columnsId}>
           <div className={"fixed"}>
-            <Header />
+            <Header nbTasks={tasks.length} setTasks={setTasks} />
             {headerIsShowing && <TodoListHeader clickHandler={closeHeader} />}
             <div style={{ height: "32px" }}></div>
-
-            {/* <div className="container"></div> */}
           </div>
 
           {!headerIsShowing && (
@@ -194,9 +192,7 @@ function App() {
             openHeader={openHeader}
             headerIsShowing={headerIsShowing}
             columns={columns}
-            activeColumn={activeColumn}
             tasks={tasks}
-            activeTask={activeTask}
             updateTask={updateTask}
           ></Tasks>
         </SortableContext>
@@ -214,7 +210,11 @@ function App() {
               />
             )}
             {activeTask && (
-              <TaskCard task={activeTask} updateTask={updateTask} />
+              <TaskCard
+                task={activeTask}
+                updateTask={updateTask}
+                isNewCard={false}
+              />
             )}
           </DragOverlay>,
           document.body
