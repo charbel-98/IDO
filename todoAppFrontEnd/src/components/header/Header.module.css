@@ -1,3 +1,4 @@
+@import url("../../fonts.css");
 .nav {
   height: 68px;
   display: flex;
@@ -21,5 +22,44 @@
   display: flex;
   align-items: center;
   margin-right: 50px;
-  gap: 2rem;
+  gap: 22px;
+}
+
+.searchBox {
+  background-color: transparent;
+  border-radius: 30px;
+  width: 0px;
+  height: 49px;
+  position: relative;
+  border: none;
+  padding-left: 5px;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+.search {
+  height: 100%;
+  width: 100%;
+  border: none;
+  background-color: transparent;
+  padding: 14px 0 14px 28px;
+}
+.search:focus {
+  outline: none;
+}
+input::placeholder {
+  color: #212529;
+  font-size: 18px;
+  font-weight: 500;
+  font-family: "HelveticaNeue, Thin";
+}
+.searchIcon {
+  position: absolute;
+  right: 181px;
+  top: 22px;
+}
+
+.searchContainer:hover .searchBox {
+  opacity: 1;
+  width: 400px;
+  border: 2px solid #8556a4;
 }

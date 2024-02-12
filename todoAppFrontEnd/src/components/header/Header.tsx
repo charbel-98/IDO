@@ -20,7 +20,19 @@ const Header = () => {
             <stop stopColor="#D1A8EC" offset="80%" />
           </linearGradient>
         </svg>
-        <IoSearchSharp size={24.33} style={{ fill: "url(#blue-gradient)" }} />
+        <div className={`${classes.searchContainer}`}>
+          <IoSearchSharp
+            className={`${classes.searchIcon}`}
+            size={24.33}
+            style={{ fill: "url(#blue-gradient)" }}
+          ></IoSearchSharp>
+          <div className={`${classes.searchBox}`}>
+            <input
+              className={`${classes.search}`}
+              placeholder="What are you looking for?"
+            />
+          </div>
+        </div>
         <MdOutlineAddCircleOutline
           size={24}
           style={{ fill: "url(#blue-gradient)" }}
