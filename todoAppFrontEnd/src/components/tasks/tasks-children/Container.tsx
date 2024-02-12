@@ -1,16 +1,25 @@
-import { UniqueIdentifier } from "@dnd-kit/core";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Column, TaskCard } from "../../../types";
+import { Column, TaskItem } from "../../../types";
 import { useMemo, useState } from "react";
-import Task from "./Task";
+import TaskProgress from "./TaskProgress";
+import TaskCard from "./TaskCard";
 
 interface Props {
   column: Column;
 
-  tasks: TaskCard[];
+  tasks: TaskItem[];
+  headerIsShowing: boolean;
+  openHeader: () => void;
+  updateTask: (id: string, title: string) => void;
 }
-function Container({ column, tasks }: Props) {
+function Container({
+  column,
+  tasks,
+  headerIsShowing,
+  openHeader,
+  updateTask,
+}: Props) {
   const [editMode, setEditMode] = useState(false);
 
   const tasksIds = useMemo(() => {
@@ -42,24 +51,23 @@ function Container({ column, tasks }: Props) {
     );
   }
   return (
-    <div
-      ref={setNodeRef}
-      {...attributes}
-      style={style}
-      className={"taskContainer"}
-    >
-      <button
-        {...listeners}
-        className="border p-2 text-xs rounded-xl shadow-lg hover:shadow-xl"
+    <>
+      <div
+        ref={setNodeRef}
+        {...attributes}
+        style={style}
+        className={"taskContainer"}
       >
-        Drag Handle
-      </button>
-      <SortableContext items={tasksIds}>
-        {tasks.map((task) => (
-          <Task key={task.id} task={task} />
-        ))}
-      </SortableContext>
-    </div>
+        <SortableContext items={tasksIds}>
+          <TaskProgress listeners={listeners} type={column.id} />
+          <div className={"splitter"}>
+            {tasks.map((task) => (
+              <TaskCard key={task.id} task={task} updateTask={updateTask} />
+            ))}
+          </div>
+        </SortableContext>
+      </div>
+    </>
   );
 }
 
