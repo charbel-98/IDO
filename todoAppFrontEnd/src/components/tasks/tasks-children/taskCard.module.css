@@ -1,6 +1,6 @@
 @import url("../../../fonts.css");
 .taskContainer {
-  width: 418.28px;
+  width: 25vw;
   height: 212.37px;
   background-color: #fff;
   box-shadow: 0px 3px 6px #00000029;
@@ -9,7 +9,7 @@
 .title {
   font-family: "HelveticaNeue, Medium";
   color: #000000;
-  font-size: 16px;
+  font-size: clamp(12px, 1.5vw, 16px);
   margin-left: 15px;
   margin-top: 15.5px;
   height: 43.5px;
@@ -18,9 +18,9 @@
 
 .taskPropsContainer {
   display: grid;
-  grid-template-columns: repeat(2, 72px); /* 2 columns with equal width */
-  grid-template-rows: repeat(4, 30px); /* 4 rows with a fixed height of 100px */
-  margin-left: 15px;
+  grid-template-columns: 72px 1fr; /* First column with fixed width, second column takes the rest of the available space */
+  grid-template-rows: repeat(4, 30px); /* 4 rows with a fixed height of 30px */
+  margin-inline: 15px;
   margin-bottom: 14.73px;
   margin-top: auto;
   gap: 4px;
@@ -28,7 +28,7 @@
 .propKey {
   color: #6c757d;
   font-family: "HelveticaNeue, Thin";
-  font-size: 12px;
+  font-size: clamp(8px, 1.5vw, 12px);
   line-height: 18px;
   display: flex;
   align-items: center;
@@ -36,7 +36,7 @@
 .propValue {
   color: #000000;
   font-family: "HelveticaNeue, Light";
-  font-size: 14px;
+  font-size: clamp(8px, 1.5vw, 14px); /* 10px to 14px */
   line-height: 21px;
   display: flex;
   align-items: center;
@@ -46,23 +46,26 @@
   /* UI Properties */
   border-radius: 4px;
   font-family: "HelveticaNeue, Light";
-  font-size: 13px;
+  font-size: clamp(9px, 1.5vw, 13px);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #ffffff;
+  width: 100%; /* Default to 100% width */
+  max-width: 66px;
 }
 .boxSuccess {
   background: #39ac95 0% 0% no-repeat padding-box;
-  width: 44px;
 }
 .boxWarning {
   background: #fe913e 0% 0% no-repeat padding-box;
-  width: 66px;
+
+  width: 100%; /* Default to 100% width */
 }
 .boxDanger {
   background: #dc3545 0% 0% no-repeat padding-box;
-  width: 46px;
+  max-width: 46px;
+  min-width: 35px;
 }
 .input {
   height: 43.5px;
@@ -97,5 +100,11 @@
   }
   100% {
     transform: translateY(0);
+  }
+}
+@media screen and (max-width: 768px) {
+  .taskPropsContainer {
+    grid-template-columns: repeat(2, minmax(50px, 1fr));
+    /* Adjust the minmax values or use a fixed percentage for column width */
   }
 }

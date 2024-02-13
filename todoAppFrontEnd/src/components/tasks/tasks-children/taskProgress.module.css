@@ -1,7 +1,7 @@
 @import url("../../../fonts.css");
 
 .progressCard {
-  width: 422px;
+  width: 25vw;
   background-color: #fff;
   height: 48px;
   box-shadow: 0px 3px 6px #00000029;
@@ -15,11 +15,11 @@
 }
 .title {
   margin-left: 20px;
-  font-size: 16px;
+
   font-weight: 500;
   color: #4f4f4f;
   font-family: "HelveticaNeue, Medium";
   color: #212529;
-  font-size: 18px;
+  font-size: clamp(14px, 1.5vw, 18px);
   line-height: 21px;
 }

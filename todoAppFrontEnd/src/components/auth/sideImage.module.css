@@ -1,0 +1,35 @@
+.container {
+  width: 49vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  background-color: #fff;
+  justify-content: space-between;
+}
+.bottomContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 40vh;
+}
+.imageContainer > img {
+  margin-top: 25vh;
+  width: 25vw;
+}
+.man {
+  height: 100%;
+  margin-left: 15%;
+}
+.woman {
+  height: 90%;
+  margin-right: 15%;
+}
+.imageContainer {
+  /* width: 63.5%;
+  height: 55%; */
+  display: flex;
+  justify-content: center;
+}

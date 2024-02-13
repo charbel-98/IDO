@@ -26,16 +26,16 @@ const Header = ({ setTasks, nbTasks }: Props) => {
           </linearGradient>
         </svg>
         <div className={`${classes.searchContainer}`}>
-          <IoSearchSharp
-            className={`${classes.searchIcon}`}
-            size={24.33}
-            style={{ fill: "url(#blue-gradient)" }}
-          ></IoSearchSharp>
           <div className={`${classes.searchBox}`}>
             <input
               className={`${classes.search}`}
               placeholder="What are you looking for?"
             />
+            <IoSearchSharp
+              className={`${classes.searchIcon}`}
+              size={24.33}
+              style={{ fill: "url(#blue-gradient)" }}
+            ></IoSearchSharp>
           </div>
         </div>
         <MdOutlineAddCircleOutline
@@ -43,7 +43,10 @@ const Header = ({ setTasks, nbTasks }: Props) => {
           size={24}
           style={{ fill: "url(#blue-gradient)" }}
         />
-        <img src={avatar} className={`${classes.avatar}`} />
+        <div className={`${classes.profileContainer}`}>
+          <img src={avatar} className={`${classes.avatar}`} />
+          <div className={`${classes.profileToggle}`}></div>
+        </div>
       </div>
     </nav>
   );

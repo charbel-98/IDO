@@ -1,5 +1,6 @@
 import Container from "./tasks-children/Container";
 import { Column, TaskItem } from "../../types";
+import { InfoIcon } from "../../assets/Icons";
 
 interface Props {
   columns: Column[];
@@ -32,6 +33,11 @@ function Tasks({
           tasks={tasks.filter((task) => task.columnId === col.id)}
         ></Container>
       ))}
+      {!headerIsShowing && (
+        <div className="infoIconContainer">
+          <InfoIcon clickHandler={openHeader} styleClasses={"infoIcon"} />
+        </div>
+      )}
     </div>
   );
 }

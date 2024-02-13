@@ -13,35 +13,83 @@
   width: 100px;
   height: 60px;
 }
+.profileContainer {
+  border: 2px green solid;
+  position: relative;
+  z-index: 9999;
+}
 .avatar {
   width: 42px;
   height: 42px;
   border-radius: 50%;
 }
+.profileToggle {
+  width: 348px;
+  height: 126px;
+  border: 2px red solid;
+  position: absolute;
+  right: -5px;
+}
 .navContainer {
   display: flex;
   align-items: center;
-  margin-right: 50px;
-  gap: 22px;
+  margin-right: 5%;
+  gap: 3vw;
 }
 
 .searchBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: transparent;
   border-radius: 30px;
-  width: 0px;
+  /* padding-inline: 10px; */
   height: 49px;
   position: relative;
   border: none;
-  padding-left: 5px;
-  opacity: 0;
-  transition: opacity 0.3s ease-out;
+  /* border: 2px solid #8556a4; */
 }
+.searchBox:hover {
+  border: 2px solid #8556a4;
+  padding-inline: 10px;
+
+  .search {
+    padding: 14px 0 14px 28px;
+    max-width: 400px;
+    width: 400px;
+    opacity: 1;
+    animation: showSearch 0.5s forwards;
+  }
+}
+
 .search {
   height: 100%;
   width: 100%;
   border: none;
+  max-width: 0;
+  opacity: 0;
   background-color: transparent;
-  padding: 14px 0 14px 28px;
+  animation: hideSearch 0.5s forwards;
+}
+@keyframes showSearch {
+  from {
+    max-width: 0;
+    opacity: 0;
+  }
+  to {
+    max-width: 400px;
+    opacity: 1;
+  }
+}
+@keyframes hideSearch {
+  from {
+    /* max-width: 400px; */
+    opacity: 1;
+  }
+  to {
+    /* max-width: 0; */
+    opacity: 0;
+  }
 }
 .search:focus {
   outline: none;
@@ -53,13 +101,19 @@ input::placeholder {
   font-family: "HelveticaNeue, Thin";
 }
 .searchIcon {
-  position: absolute;
-  right: 181px;
-  top: 22px;
+  /* position: absolute; */
+  /* right: 181px;
+  top: 22px; */
 }
 
-.searchContainer:hover .searchBox {
+/* .searchContainer:hover .searchBox,
+.searchBox:has(.search:focus) {
   opacity: 1;
+  max-width: 400px;
   width: 400px;
-  border: 2px solid #8556a4;
+} */
+@media screen and (max-width: 768px) {
+  .navContainer {
+    gap: 20px; /* Adjust the gap value for smaller screens */
+  }
 }
