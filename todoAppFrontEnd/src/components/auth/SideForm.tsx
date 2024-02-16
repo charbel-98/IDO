@@ -63,7 +63,9 @@ function SideForm() {
           onChange={emailChangeHandler}
           onBlur={emailBlurHandler}
           placeholder="user@example.com"
-          className={`${emailIsValid && emailTouched && classes.inputError}`}
+          className={`${
+            !emailIsValid && emailTouched ? classes.inputError : ""
+          }`}
         />
         <div>{emailErrorMessage}</div>
         <input
@@ -73,7 +75,7 @@ function SideForm() {
           value={password}
           placeholder="**********"
           className={`${
-            passwordIsValid && passwordTouched && classes.inputError
+            !passwordIsValid && passwordTouched ? classes.inputError : ""
           }`}
         />
         <div>{passwordErrorMessage}</div>

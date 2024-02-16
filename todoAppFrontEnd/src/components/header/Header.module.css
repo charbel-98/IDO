@@ -130,6 +130,26 @@ input::placeholder {
 .hideProfile {
   animation: 0.3s hideProfile ease-in-out forwards;
 }
+.notification {
+  border-left: 5px red solid;
+  width: 200px;
+  height: 80px;
+  position: absolute;
+  top: 50%;
+  background-color: #fff;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "HelveticaNeue, Medium";
+  font-size: clamp(10px, 1.8vw, 15px);
+}
+.showNotification {
+  animation: 0.3s showNotification ease-in-out forwards;
+}
+.hideNotification {
+  animation: 0.3s hideNotification ease-in-out forwards;
+}
 @media screen and (min-width: 795px) and (max-width: 1276px) {
   .profileToggle {
     width: 28vw;
@@ -162,6 +182,30 @@ input::placeholder {
   }
   to {
     opacity: 0;
+    display: none;
+  }
+}
+@keyframes showNotification {
+  from {
+    opacity: 0;
+    right: -400px;
+    display: none;
+  }
+  to {
+    opacity: 1;
+    right: 40px;
+    display: inline-flex;
+  }
+}
+@keyframes hideNotification {
+  from {
+    opacity: 1;
+    right: 40px;
+    display: inline-flex;
+  }
+  to {
+    opacity: 0;
+    right: -400px;
     display: none;
   }
 }
