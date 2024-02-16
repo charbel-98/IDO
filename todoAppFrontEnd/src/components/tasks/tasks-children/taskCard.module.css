@@ -11,7 +11,7 @@
 .title {
   font-family: "HelveticaNeue, Medium";
   color: #000000;
-  font-size: clamp(12px, 1.5vw, 16px);
+  font-size: clamp(12px, 2vw, 16px);
   margin-left: 15px;
   margin-top: 15.5px;
   height: 43.5px;
@@ -27,7 +27,7 @@
 .inputTitle {
   font-family: "HelveticaNeue, Medium";
   color: #000000;
-  font-size: clamp(12px, 1.5vw, 16px);
+  font-size: clamp(12px, 2vw, 16px);
   /* margin-left: 15px;
   margin-top: 15.5px; */
   height: 43.5px;
@@ -68,7 +68,7 @@
 .propKey {
   color: #6c757d;
   font-family: "HelveticaNeue, Thin";
-  font-size: clamp(8px, 1.5vw, 12px);
+  font-size: clamp(8px, 2vw, 12px);
   line-height: 18px;
   display: flex;
   align-items: center;
@@ -76,7 +76,7 @@
 .propValue {
   color: #000000;
   font-family: "HelveticaNeue, Light";
-  font-size: clamp(8px, 1.5vw, 14px); /* 10px to 14px */
+  font-size: clamp(8px, 2.3vw, 14px); /* 10px to 14px */
   line-height: 21px;
   display: flex;
   align-items: center;
@@ -135,7 +135,7 @@
 .newCard input {
   border: none;
   border-bottom: 1px solid;
-  width: 60%;
+  width: 80%;
   color: #000000;
   font-family: "HelveticaNeue, Light";
   font-size: clamp(8px, 1.5vw, 14px);
@@ -159,13 +159,14 @@
     transform: translateY(0);
   }
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 950px) {
   .taskPropsContainer {
     grid-template-columns: repeat(2, minmax(50px, 1fr));
-    margin-inline: 0px;
-    margin-bottom: 5px;
+    margin-left: 8px;
+    margin-bottom: 8px;
     padding: 4px;
   }
+
   .propValueBox {
     width: 70%;
     height: 25px;
@@ -176,12 +177,22 @@
   }
   select {
     width: 70%;
+    font-size: clamp(8px, 1.5vw, 14px);
   }
   .doneButton {
-    left: 3%;
-    bottom: 3%;
+    left: 2%;
+    bottom: 2%;
     padding: 4px;
     width: 50px;
     margin-top: 10px;
+    font-size: clamp(8px, 1.5vw, 14px);
+  }
+}
+@media screen and (max-width: 700px) {
+  .taskContainer {
+    min-width: 150px;
+  }
+  .newCard input {
+    width: 100%;
   }
 }

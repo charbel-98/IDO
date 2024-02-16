@@ -4,7 +4,9 @@ import {
   DragOverEvent,
   DragOverlay,
   DragStartEvent,
+  MouseSensor,
   PointerSensor,
+  TouchSensor,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
@@ -12,7 +14,6 @@ import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { useEffect, useMemo, useState } from "react";
 import TodoListHeader from "../components/todoListHeader/TodoListHeader";
 import Header from "../components/header/Header";
-import { InfoIcon } from "../assets/Icons";
 import Tasks from "../components/tasks/Tasks";
 import { createPortal } from "react-dom";
 import Container from "../components/tasks/tasks-children/Container";
@@ -39,123 +40,14 @@ function HomePage() {
       title: "Done",
     },
   ];
-  const defaultTasks: TaskItem[] = [
-    {
-      id: "1",
-      columnId: "todo",
-      content: {
-        title: "Create user authentication",
-        category: "education",
-        dueDate: "2021-12-12",
-        estimate: "2 hours",
-        importance: "high",
-        progress: "todo",
-      },
-    },
-    {
-      id: "2",
-      columnId: "todo",
-      content: {
-        title: "bath",
-        category: "education",
-        dueDate: "2021-12-12",
-        estimate: "2 hours",
-        importance: "high",
-        progress: "todo",
-      },
-    },
-    {
-      id: "3",
-      columnId: "doing",
-      content: {
-        title: "toilets",
-        category: "education",
-        dueDate: "2021-12-12",
-        estimate: "2 hours",
-        importance: "high",
-        progress: "doing",
-      },
-    },
-    {
-      id: "4",
-      columnId: "doing",
-      content: {
-        title: "read",
-        category: "education",
-        dueDate: "2021-12-12",
-        estimate: "2 hours",
-        importance: "high",
-        progress: "doing",
-      },
-    },
-    {
-      id: "5",
-      columnId: "done",
-      content: {
-        title: "learn dnd-kit",
-        category: "education",
-        dueDate: "2021-12-12",
-        estimate: "2 hours",
-        importance: "high",
-        progress: "done",
-      },
-    },
-    {
-      id: "6",
-      columnId: "done",
-      content: {
-        title: ".net-core",
-        category: "education",
-        dueDate: "2021-12-12",
-        estimate: "2 hours",
-        importance: "high",
-        progress: "done",
-      },
-    },
-    {
-      id: "7",
-      columnId: "done",
-      content: {
-        title: "fuck off",
-        category: "education",
-        dueDate: "2021-12-12",
-        estimate: "2 hours",
-        importance: "high",
-        progress: "done",
-      },
-    },
-    {
-      id: "8",
-      columnId: "todo",
-      content: {
-        title: "hello",
-        category: "education",
-        dueDate: "2021-12-12",
-        estimate: "2 hours",
-        importance: "high",
-        progress: "todo",
-      },
-    },
-    {
-      id: "9",
-      columnId: "todo",
-      content: {
-        title: "Create user authentication",
-        category: "education",
-        dueDate: "2021-12-12",
-        estimate: "2 hours",
-        importance: "high",
-        progress: "todo",
-      },
-    },
-  ];
+
   const axiosPrivate = useAxiosPrivate();
   const [isIoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const [columns, setColumns] = useState<Column[]>(defaultCols);
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
 
-  const [tasks, setTasks] = useState<TaskItem[]>(defaultTasks);
+  const [tasks, setTasks] = useState<TaskItem[]>([]);
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
@@ -192,7 +84,7 @@ function HomePage() {
         setIsLoading(false);
       } catch (err) {
         console.error(err);
-        if (err.response?.status === 401) {
+        if ((err as any).response?.data?.status === 401) {
           navigate("/login", { state: { from: location }, replace: true });
         }
         setIsLoading(false);
@@ -219,6 +111,17 @@ function HomePage() {
     setHeaderIsShowing(true);
   };
   const sensors = useSensors(
+    // useSensor(TouchSensor, {
+    //   activationConstraint: {
+    //     delay: 250,
+    //     tolerance: 5,
+    //   },
+    // }),
+    // useSensor(MouseSensor, {
+    //   activationConstraint: {
+    //     distance: 10,
+    //   },
+    // })
     useSensor(PointerSensor, {
       activationConstraint: {
         distance: 10,
@@ -358,10 +261,9 @@ function HomePage() {
     if (isActiveATask && isOverAColumn) {
       setTasks((tasks) => {
         const activeIndex = tasks.findIndex((t) => t.id === activeId);
-
         tasks[activeIndex].columnId = overId.toString();
         tasks[activeIndex].content.progress = overId.toString();
-        const response = axiosPrivate.put(`/Todo/${tasks[activeIndex].id}`, {
+        axiosPrivate.put(`/Todo/${tasks[activeIndex].id}`, {
           isCompleted: overId === "done",
           isInProgress: overId === "doing",
           dueDate: tasks[activeIndex].content.dueDate,

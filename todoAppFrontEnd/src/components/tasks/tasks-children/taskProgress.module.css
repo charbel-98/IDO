@@ -2,6 +2,7 @@
 
 .progressCard {
   width: 25vw;
+  max-width: 420px;
   background-color: #fff;
   height: 48px;
   box-shadow: 0px 3px 6px #00000029;
@@ -23,4 +24,19 @@
   color: #212529;
   font-size: clamp(14px, 1.5vw, 18px);
   line-height: 21px;
+}
+
+@media screen and (max-width: 700px) {
+  .progressCard {
+    /*remove position fixed property*/
+    position: relative;
+    min-width: 150px;
+    justify-content: space-evenly;
+  }
+  .title {
+    margin-left: 0;
+  }
+  .icon {
+    margin-left: 0;
+  }
 }

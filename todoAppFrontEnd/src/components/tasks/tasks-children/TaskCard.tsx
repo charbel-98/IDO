@@ -5,9 +5,9 @@ import { TaskItem } from "../../../types";
 import { useMemo, useState } from "react";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import { useNavigate } from "react-router-dom";
-import { FiDelete } from "react-icons/fi";
 import { BsTrash } from "react-icons/bs";
-import { axiosPrivate } from "../../../api/axios";
+import { useDispatch } from "react-redux";
+import { setError } from "../../../redux/errorSlice";
 interface Props {
   task: TaskItem;
   isNewCard: boolean;
@@ -19,6 +19,7 @@ function TaskCard({ task, updateTask, isNewCard, setTasks }: Props) {
   const [editMode, setEditMode] = useState(false);
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const Task = useMemo(() => {
     return task;
   }, [task]);
@@ -99,6 +100,14 @@ function TaskCard({ task, updateTask, isNewCard, setTasks }: Props) {
       e.preventDefault();
       console.log(todoData);
       try {
+        if (Object.values(todoData).some((value) => value === "")) {
+          return dispatch(
+            setError({
+              error: "All fields must be filled",
+              errorState: true,
+            })
+          );
+        }
         const response = await axiosPrivate.post("/Todo", todoData);
         console.log(response.data);
         const newTask: TaskItem = {
@@ -121,7 +130,13 @@ function TaskCard({ task, updateTask, isNewCard, setTasks }: Props) {
         navigate("/");
       } catch (err) {
         console.log(err);
-        if (err.response.statusCode === 401) {
+        dispatch(
+          setError({
+            error: "Something went wrong",
+            errorState: true,
+          })
+        );
+        if ((err as any).response.data.status === 401) {
           navigate("/login");
         }
         //check for err
@@ -183,6 +198,14 @@ function TaskCard({ task, updateTask, isNewCard, setTasks }: Props) {
     const editTask = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       try {
+        if (Object.values(todoData).some((value) => value === "")) {
+          return dispatch(
+            setError({
+              error: "All fields must be filled",
+              errorState: true,
+            })
+          );
+        }
         const response = await axiosPrivate.put(`/Todo/${task.id}`, todoData);
         const mappedResponseData = {
           id: response.data.id,
@@ -209,6 +232,12 @@ function TaskCard({ task, updateTask, isNewCard, setTasks }: Props) {
         console.log(response.data);
       } catch (err) {
         console.log(err);
+        dispatch(
+          setError({
+            error: (err as any).response.data.message,
+            errorState: true,
+          })
+        );
       }
     };
     return (
