@@ -14,7 +14,7 @@ body {
 }
 .taskContainer {
   width: 25vw;
-  margin-left: 2rem;
+  margin-left: 3vw;
 }
 .splitter {
   width: fit-content;
@@ -38,6 +38,7 @@ body {
   position: sticky;
   top: 0;
   background-color: #f4f7fc;
+  z-index: 2;
 }
 .progressContainer {
   display: flex;
@@ -46,4 +47,9 @@ body {
 }
 .progressContainer > div {
   margin-left: 34px;
+}
+@media screen and (max-width: 768px) {
+  .taskContainer {
+    width: 30vw;
+  }
 }

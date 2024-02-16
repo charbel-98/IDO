@@ -16,8 +16,8 @@
   /*HelveticaNeue, Italic*/
   font-family: "HelveticaNeue, Italic";
   color: #ffffff;
-  margin-left: 44px;
-  font-size: 18px;
+  margin-left: 2.29vw;
+  font-size: clamp(10px, 3vw, 18px);
   line-height: 21px;
 }
 .icon {

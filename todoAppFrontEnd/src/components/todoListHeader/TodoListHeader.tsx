@@ -6,7 +6,11 @@ const TodoListHeader = ({ clickHandler }: { clickHandler: () => void }) => {
       <div className={`${classes.content}`}>
         "Anything that can go wrong, will go wrong!"
       </div>
-      <div style={{ marginRight: "50px" }}>
+      <div
+        style={{
+          marginRight: "5%",
+        }}
+      >
         <IoClose
           onClick={clickHandler}
           className={`${classes.icon}`}

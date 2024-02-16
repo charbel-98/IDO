@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
@@ -6,8 +8,9 @@ using TodoApi.DTOs;
 
 namespace TodoApi.Controllers
 {
-    [ApiController]
+    [Authorize(AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
+    [ApiController]
     public class TodoController : ControllerBase
     {
         private readonly TodoApiDbContext _context;
@@ -20,7 +23,10 @@ namespace TodoApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTodos()
         {
-           return Ok(await _context.TodoItems.ToListAsync());
+            //find the user id from the authorization token
+            var userId = Guid.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "Id").Value);
+            var todos = await _context.TodoItems.Where(todo => todo.UserId == userId).ToListAsync();
+            return Ok(todos);
         }
 
         [HttpGet]
@@ -36,6 +42,8 @@ namespace TodoApi.Controllers
         [HttpPost]
         public async Task<IActionResult> AddTodo(AddTodoDto addTodoRequest)
         {
+            //the new toto should be linked to a user
+            var userId = Guid.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "Id").Value);
             var todo = new Todo()
             {
                 Id = Guid.NewGuid(),
@@ -44,7 +52,9 @@ namespace TodoApi.Controllers
                 IsInProgress = addTodoRequest.IsInProgress,
                 Importance = addTodoRequest.Importance,
                 DueDate = addTodoRequest.DueDate,
-                EstimatedTime = addTodoRequest.EstimatedTime
+                EstimatedTime = addTodoRequest.EstimatedTime,
+                Category = addTodoRequest.Category,
+                UserId = userId
             };
            await _context.TodoItems.AddAsync(todo);
            await _context.SaveChangesAsync();
@@ -65,6 +75,7 @@ namespace TodoApi.Controllers
             todo.Importance = updateTodoRequest.Importance;
             todo.DueDate = updateTodoRequest.DueDate;
             todo.EstimatedTime = updateTodoRequest.EstimatedTime;
+            todo.Category = updateTodoRequest.Category;
             await _context.SaveChangesAsync();
             return Ok(todo);
         }

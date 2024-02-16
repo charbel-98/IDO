@@ -1,10 +1,12 @@
 @import url("../../../fonts.css");
 .taskContainer {
   width: 25vw;
+  max-width: 420px;
   height: 212.37px;
   background-color: #fff;
   box-shadow: 0px 3px 6px #00000029;
   border-radius: 6px;
+  position: relative;
 }
 .title {
   font-family: "HelveticaNeue, Medium";
@@ -14,8 +16,46 @@
   margin-top: 15.5px;
   height: 43.5px;
   line-height: 24px;
+  display: flex;
+  justify-content: space-between;
+}
+.titleMargin {
+  margin-left: 15px;
+  margin-top: 15.5px;
 }
 
+.inputTitle {
+  font-family: "HelveticaNeue, Medium";
+  color: #000000;
+  font-size: clamp(12px, 1.5vw, 16px);
+  /* margin-left: 15px;
+  margin-top: 15.5px; */
+  height: 43.5px;
+  line-height: 24px;
+}
+
+.trashButton {
+  margin-right: 10%;
+  /*remove inital style*/
+  background: none;
+  border: none;
+}
+.trashButton:focus {
+  outline: none;
+}
+.trashButton:hover {
+  color: #dc3545;
+}
+.doneButton {
+  position: absolute;
+  right: 6%;
+  bottom: 6%;
+  background-color: #39ac95;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+}
 .taskPropsContainer {
   display: grid;
   grid-template-columns: 72px 1fr; /* First column with fixed width, second column takes the rest of the available space */
@@ -56,6 +96,7 @@
 }
 .boxSuccess {
   background: #39ac95 0% 0% no-repeat padding-box;
+  width: 100%;
 }
 .boxWarning {
   background: #fe913e 0% 0% no-repeat padding-box;
@@ -64,8 +105,7 @@
 }
 .boxDanger {
   background: #dc3545 0% 0% no-repeat padding-box;
-  max-width: 46px;
-  min-width: 35px;
+  width: 100%;
 }
 .input {
   height: 43.5px;
@@ -91,7 +131,24 @@
 
 .newCard {
   animation: showNewCard 0.7s ease;
-  z-index: -1;
+}
+.newCard input {
+  border: none;
+  border-bottom: 1px solid;
+  width: 60%;
+  color: #000000;
+  font-family: "HelveticaNeue, Light";
+  font-size: clamp(8px, 1.5vw, 14px);
+  margin-bottom: 5px;
+}
+.newCard div:first-child input {
+  width: 70%;
+  font-family: "HelveticaNeue, Medium";
+  font-size: clamp(12px, 1.5vw, 16px);
+}
+.newCard input:focus {
+  outline: none;
+  padding-left: 3px;
 }
 
 @keyframes showNewCard {
@@ -105,6 +162,26 @@
 @media screen and (max-width: 768px) {
   .taskPropsContainer {
     grid-template-columns: repeat(2, minmax(50px, 1fr));
-    /* Adjust the minmax values or use a fixed percentage for column width */
+    margin-inline: 0px;
+    margin-bottom: 5px;
+    padding: 4px;
+  }
+  .propValueBox {
+    width: 70%;
+    height: 25px;
+  }
+  .title {
+    margin-left: 8px;
+    margin-top: 8px;
+  }
+  select {
+    width: 70%;
+  }
+  .doneButton {
+    left: 3%;
+    bottom: 3%;
+    padding: 4px;
+    width: 50px;
+    margin-top: 10px;
   }
 }

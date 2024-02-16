@@ -33,3 +33,8 @@
   display: flex;
   justify-content: center;
 }
+@media screen and (max-width: 550px) {
+  .container {
+    display: none;
+  }
+}

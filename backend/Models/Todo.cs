@@ -11,5 +11,11 @@ namespace Models
         public string Importance { get; set; }
         public DateTime DueDate { get; set; }
         public string EstimatedTime { get; set; }
-    }
-}
+        public string Category { get; set; }
+        public Guid UserId { get; set; }
+
+                // Navigation property
+            }
+        }
+        
+  

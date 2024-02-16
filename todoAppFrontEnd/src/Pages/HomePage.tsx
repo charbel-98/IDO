@@ -9,7 +9,7 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import TodoListHeader from "../components/todoListHeader/TodoListHeader";
 import Header from "../components/header/Header";
 import { InfoIcon } from "../assets/Icons";
@@ -18,8 +18,13 @@ import { createPortal } from "react-dom";
 import Container from "../components/tasks/tasks-children/Container";
 import TaskCard from "../components/tasks/tasks-children/TaskCard";
 import { Column, Id, TaskItem } from "../types";
+import useAuth from "../hooks/useAuth";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import { useNavigate } from "react-router-dom";
 
 function HomePage() {
+  const auth = useAuth();
+  console.log(auth);
   const defaultCols: Column[] = [
     {
       id: "todo",
@@ -144,10 +149,63 @@ function HomePage() {
       },
     },
   ];
+  const axiosPrivate = useAxiosPrivate();
+  const [isIoading, setIsLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
   const [columns, setColumns] = useState<Column[]>(defaultCols);
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
 
   const [tasks, setTasks] = useState<TaskItem[]>(defaultTasks);
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+    setIsLoading(true);
+    const getJourneys = async () => {
+      try {
+        const response = await axiosPrivate.get("/Todo", {
+          signal: controller.signal,
+        });
+        console.log(response.data);
+        const dbTasks = response.data.map((task: any) => {
+          return {
+            id: task.id,
+            columnId: task.isCompleted
+              ? "done"
+              : task.isInProgress
+              ? "doing"
+              : "todo",
+            content: {
+              title: task.title,
+              category: task.category,
+              dueDate: task.dueDate.split("T")[0],
+              estimate: task.estimatedTime,
+              importance: task.importance,
+              progress: task.isCompleted
+                ? "done"
+                : task.isInProgress
+                ? "doing"
+                : "todo",
+            },
+          };
+        });
+        isMounted && setTasks(dbTasks);
+        setIsLoading(false);
+      } catch (err) {
+        console.error(err);
+        if (err.response?.status === 401) {
+          navigate("/login", { state: { from: location }, replace: true });
+        }
+        setIsLoading(false);
+      }
+    };
+    getJourneys();
+
+    return () => {
+      isMounted = false;
+      setIsLoading(false);
+      controller.abort();
+    };
+  }, []);
 
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
 
@@ -190,6 +248,7 @@ function HomePage() {
           headerIsShowing={headerIsShowing}
           columns={columns}
           tasks={tasks}
+          setTasks={setTasks}
           updateTask={updateTask}
         ></Tasks>
       </SortableContext>
@@ -201,6 +260,7 @@ function HomePage() {
               headerIsShowing={headerIsShowing}
               column={activeColumn}
               updateTask={updateTask}
+              setTasks={setTasks}
               tasks={tasks.filter((task) => task.columnId === activeColumn?.id)}
             />
           )}
@@ -209,6 +269,7 @@ function HomePage() {
               task={activeTask}
               updateTask={updateTask}
               isNewCard={false}
+              setTasks={setTasks}
             />
           )}
         </DragOverlay>,
@@ -216,10 +277,10 @@ function HomePage() {
       )}
     </DndContext>
   );
-  function updateTask(id: Id, title: string) {
+  function updateTask(id: Id, updatedTask: TaskItem) {
     const newTasks = tasks.map((task) => {
       if (task.id !== id) return task;
-      return { ...task, content: { ...task.content, title } };
+      return { ...task, content: { ...updatedTask.content } };
     });
 
     setTasks(newTasks);
@@ -300,6 +361,15 @@ function HomePage() {
 
         tasks[activeIndex].columnId = overId.toString();
         tasks[activeIndex].content.progress = overId.toString();
+        const response = axiosPrivate.put(`/Todo/${tasks[activeIndex].id}`, {
+          isCompleted: overId === "done",
+          isInProgress: overId === "doing",
+          dueDate: tasks[activeIndex].content.dueDate,
+          estimatedTime: tasks[activeIndex].content.estimate,
+          importance: tasks[activeIndex].content.importance,
+          title: tasks[activeIndex].content.title,
+          category: tasks[activeIndex].content.category,
+        });
         console.log("DROPPING TASK OVER COLUMN", { activeIndex });
         return arrayMove(tasks, activeIndex, activeIndex);
       });
