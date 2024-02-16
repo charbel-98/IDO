@@ -1,43 +1,31 @@
-import { useState } from "react";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
-import { InfoIcon } from "./assets/Icons";
-import Header from "./components/header/Header";
-import TaskList from "./components/taskList/TaskList";
-import TodoListHeader from "./components/todoListHeader/TodoListHeader";
-import TaskProgress from "./components/UI/TaskProgress";
-
+import AuthPage from "./Pages/AuthPage";
+import HomePage from "./Pages/HomePage";
+import PersistLogin from "./Pages/PersistLogin";
+import RequireAuth from "./Pages/RequireAuth";
+import { useEffect } from "react";
+function Logout() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    localStorage.clear();
+    navigate("/login");
+  }, []);
+  return <></>;
+}
 function App() {
-  const [headerIsShowing, setHeaderIsShowing] = useState(true);
-  const closeHeader = () => {
-    setHeaderIsShowing(false);
-  };
-  const openHeader = () => {
-    setHeaderIsShowing(true);
-  };
   return (
-    <main>
-      <div className={"fixed"}>
-        <Header />
-        {headerIsShowing && <TodoListHeader clickHandler={closeHeader} />}
-        <div className="container">
-          <div className={"progressContainer"}>
-            <TaskProgress type={"doing"} />
-            <TaskProgress type={"todo"} />
-            <TaskProgress type={"done"} />
-          </div>
-          <div>
-            {!headerIsShowing && (
-              <InfoIcon clickHandler={openHeader} styleClasses={"infoIcon"} />
-            )}
-          </div>
-        </div>
-      </div>
-      <div className="container">
-        <div className="taskContainer">
-          <TaskList />
-        </div>
-      </div>
-    </main>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<AuthPage />} />
+        <Route path="/logout" element={<Logout />} />
+        <Route element={<PersistLogin />}>
+          <Route element={<RequireAuth />}>
+            <Route path="/" element={<HomePage />}></Route>
+          </Route>
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

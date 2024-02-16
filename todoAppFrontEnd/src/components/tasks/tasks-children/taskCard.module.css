@@ -1,0 +1,187 @@
+@import url("../../../fonts.css");
+.taskContainer {
+  width: 25vw;
+  max-width: 420px;
+  height: 212.37px;
+  background-color: #fff;
+  box-shadow: 0px 3px 6px #00000029;
+  border-radius: 6px;
+  position: relative;
+}
+.title {
+  font-family: "HelveticaNeue, Medium";
+  color: #000000;
+  font-size: clamp(12px, 1.5vw, 16px);
+  margin-left: 15px;
+  margin-top: 15.5px;
+  height: 43.5px;
+  line-height: 24px;
+  display: flex;
+  justify-content: space-between;
+}
+.titleMargin {
+  margin-left: 15px;
+  margin-top: 15.5px;
+}
+
+.inputTitle {
+  font-family: "HelveticaNeue, Medium";
+  color: #000000;
+  font-size: clamp(12px, 1.5vw, 16px);
+  /* margin-left: 15px;
+  margin-top: 15.5px; */
+  height: 43.5px;
+  line-height: 24px;
+}
+
+.trashButton {
+  margin-right: 10%;
+  /*remove inital style*/
+  background: none;
+  border: none;
+}
+.trashButton:focus {
+  outline: none;
+}
+.trashButton:hover {
+  color: #dc3545;
+}
+.doneButton {
+  position: absolute;
+  right: 6%;
+  bottom: 6%;
+  background-color: #39ac95;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+}
+.taskPropsContainer {
+  display: grid;
+  grid-template-columns: 72px 1fr; /* First column with fixed width, second column takes the rest of the available space */
+  grid-template-rows: repeat(4, 30px); /* 4 rows with a fixed height of 30px */
+  margin-inline: 15px;
+  margin-bottom: 14.73px;
+  margin-top: auto;
+  gap: 4px;
+}
+.propKey {
+  color: #6c757d;
+  font-family: "HelveticaNeue, Thin";
+  font-size: clamp(8px, 1.5vw, 12px);
+  line-height: 18px;
+  display: flex;
+  align-items: center;
+}
+.propValue {
+  color: #000000;
+  font-family: "HelveticaNeue, Light";
+  font-size: clamp(8px, 1.5vw, 14px); /* 10px to 14px */
+  line-height: 21px;
+  display: flex;
+  align-items: center;
+}
+.propValueBox {
+  height: 30px;
+  /* UI Properties */
+  border-radius: 4px;
+  font-family: "HelveticaNeue, Light";
+  font-size: clamp(9px, 1.5vw, 13px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  width: 100%; /* Default to 100% width */
+  max-width: 66px;
+}
+.boxSuccess {
+  background: #39ac95 0% 0% no-repeat padding-box;
+  width: 100%;
+}
+.boxWarning {
+  background: #fe913e 0% 0% no-repeat padding-box;
+
+  width: 100%; /* Default to 100% width */
+}
+.boxDanger {
+  background: #dc3545 0% 0% no-repeat padding-box;
+  width: 100%;
+}
+.input {
+  height: 43.5px;
+  width: 403px;
+  border-radius: 50px;
+  margin-left: 15px;
+  margin-top: 15.5px;
+  /* border-color: linear-gradient(90deg, #ff8a00 0%, #e52e71 100%); */
+  border: 1px solid #6e4c85;
+  font-family: "HelveticaNeue, Medium";
+  font-size: 16px;
+
+  line-height: 24px;
+}
+
+.input:focus {
+  outline: none;
+  border: 1px solid #2d2b52;
+  box-shadow: 0 0 2px 2px rgba(110, 76, 133, 0.25);
+  /*I want to also indent the cursor on focus*/
+  padding-left: 14px;
+}
+
+.newCard {
+  animation: showNewCard 0.7s ease;
+}
+.newCard input {
+  border: none;
+  border-bottom: 1px solid;
+  width: 60%;
+  color: #000000;
+  font-family: "HelveticaNeue, Light";
+  font-size: clamp(8px, 1.5vw, 14px);
+  margin-bottom: 5px;
+}
+.newCard div:first-child input {
+  width: 70%;
+  font-family: "HelveticaNeue, Medium";
+  font-size: clamp(12px, 1.5vw, 16px);
+}
+.newCard input:focus {
+  outline: none;
+  padding-left: 3px;
+}
+
+@keyframes showNewCard {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+@media screen and (max-width: 768px) {
+  .taskPropsContainer {
+    grid-template-columns: repeat(2, minmax(50px, 1fr));
+    margin-inline: 0px;
+    margin-bottom: 5px;
+    padding: 4px;
+  }
+  .propValueBox {
+    width: 70%;
+    height: 25px;
+  }
+  .title {
+    margin-left: 8px;
+    margin-top: 8px;
+  }
+  select {
+    width: 70%;
+  }
+  .doneButton {
+    left: 3%;
+    bottom: 3%;
+    padding: 4px;
+    width: 50px;
+    margin-top: 10px;
+  }
+}
