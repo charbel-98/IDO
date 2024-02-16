@@ -110,7 +110,7 @@ input::placeholder {
 .userInfo > p:first-child {
   color: #6e4c85;
   font-family: "HelveticaNeue, Medium";
-  font-size: clamp(12px, 2vw, 18px);
+  font-size: clamp(12px, 1.8vw, 18px);
   line-height: 21px;
 }
 .userInfo > p:last-child {
@@ -130,7 +130,7 @@ input::placeholder {
 .hideProfile {
   animation: 0.3s hideProfile ease-in-out forwards;
 }
-@media screen and (width >=1024px) {
+@media screen and (min-width: 795px) and (max-width: 1276px) {
   .profileToggle {
     width: 28vw;
   }
