@@ -8,7 +8,12 @@ import useInput from "../../hooks/useInput";
 function SideForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const [errorMessage, setErrorMessage] = useState({
+    email: "Email must be an Osd Services domain email",
+    password:
+      "Password must be at least 8 digits, one special character, one uppercase and one number",
+  });
+  const [backendError, setBackendError] = useState(false);
   const {
     value: email,
     isValid: emailIsValid,
@@ -22,10 +27,14 @@ function SideForm() {
         /(?:\+961|961)?(1|0?3[0-9]?|[4-6]|70|71|76|78|79|7|81?|9)\d{6}/;
       const emailRegex =
         /[\w]*@*[a-z]*\.*[\w]{5,}(\.)*(com)*(@osdservices\.com)/;
-      return mobileRegex.test(value.trim()) || emailRegex.test(value.trim());
+      return (
+        (mobileRegex.test(value.trim()) || emailRegex.test(value.trim())) &&
+        backendError === false
+      );
     },
     required: true,
-    message: "Email must be valid",
+    message: errorMessage.email,
+    setBackendError: setBackendError,
   });
   const {
     value: password,
@@ -38,11 +47,11 @@ function SideForm() {
     validator: (value: string) => {
       const regex =
         /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
-      return regex.test(value.trim());
+      return regex.test(value.trim()) && backendError === false;
     },
     required: true,
-    message:
-      "Password must be at least 8 digits, one special character, one uppercase and one number",
+    message: errorMessage.password,
+    setBackendError: setBackendError,
   });
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -50,7 +59,16 @@ function SideForm() {
     const result = await dispatch(
       login({ email, password }) as unknown as AnyAction
     ); // Updated dispatch function with correct action type
-    console.log(result);
+    // console.log(result);
+
+    if (result.error?.message) {
+      console.log(result.error.message);
+      setErrorMessage({
+        email: "Invalid Credentials!",
+        password: "Invalid Credentials!",
+      });
+      return setBackendError(true);
+    }
     navigate("/");
   };
   return (
@@ -79,7 +97,7 @@ function SideForm() {
           }`}
         />
         <div>{passwordErrorMessage}</div>
-        <input type="submit" />
+        <input type="submit" disabled={!passwordIsValid || !emailIsValid} />
       </form>
     </div>
   );

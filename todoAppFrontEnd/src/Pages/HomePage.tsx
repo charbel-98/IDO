@@ -5,7 +5,6 @@ import {
   DragOverlay,
   DragStartEvent,
   MouseSensor,
-  PointerSensor,
   TouchSensor,
   useSensor,
   useSensors,
@@ -19,13 +18,10 @@ import { createPortal } from "react-dom";
 import Container from "../components/tasks/tasks-children/Container";
 import TaskCard from "../components/tasks/tasks-children/TaskCard";
 import { Column, Id, TaskItem } from "../types";
-import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { useNavigate } from "react-router-dom";
 
 function HomePage() {
-  const auth = useAuth();
-  console.log(auth);
   const defaultCols: Column[] = [
     {
       id: "todo",
@@ -42,7 +38,6 @@ function HomePage() {
   ];
 
   const axiosPrivate = useAxiosPrivate();
-  const [isIoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const [columns, setColumns] = useState<Column[]>(defaultCols);
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
@@ -51,13 +46,12 @@ function HomePage() {
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
-    setIsLoading(true);
     const getJourneys = async () => {
       try {
         const response = await axiosPrivate.get("/Todo", {
           signal: controller.signal,
         });
-        console.log(response.data);
+        // console.log(response.data);
         const dbTasks = response.data.map((task: any) => {
           return {
             id: task.id,
@@ -81,20 +75,17 @@ function HomePage() {
           };
         });
         isMounted && setTasks(dbTasks);
-        setIsLoading(false);
       } catch (err) {
         console.error(err);
         if ((err as any).response?.data?.status === 401) {
           navigate("/login", { state: { from: location }, replace: true });
         }
-        setIsLoading(false);
       }
     };
     getJourneys();
 
     return () => {
       isMounted = false;
-      setIsLoading(false);
       controller.abort();
     };
   }, []);
@@ -111,18 +102,13 @@ function HomePage() {
     setHeaderIsShowing(true);
   };
   const sensors = useSensors(
-    // useSensor(TouchSensor, {
-    //   activationConstraint: {
-    //     delay: 250,
-    //     tolerance: 5,
-    //   },
-    // }),
-    // useSensor(MouseSensor, {
-    //   activationConstraint: {
-    //     distance: 10,
-    //   },
-    // })
-    useSensor(PointerSensor, {
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 250,
+        tolerance: 5,
+      },
+    }),
+    useSensor(MouseSensor, {
       activationConstraint: {
         distance: 10,
       },
@@ -159,8 +145,6 @@ function HomePage() {
         <DragOverlay>
           {activeColumn && (
             <Container
-              openHeader={openHeader}
-              headerIsShowing={headerIsShowing}
               column={activeColumn}
               updateTask={updateTask}
               setTasks={setTasks}
@@ -213,6 +197,7 @@ function HomePage() {
     if (activeId === overId) return;
 
     const isActiveAColumn = active.data.current?.type === "Column";
+
     if (!isActiveAColumn) return;
 
     console.log("DRAG END");
@@ -245,9 +230,20 @@ function HomePage() {
       setTasks((tasks) => {
         const activeIndex = tasks.findIndex((t) => t.id === activeId);
         const overIndex = tasks.findIndex((t) => t.id === overId);
+        console.log(tasks[activeIndex].id);
 
         if (tasks[activeIndex].columnId != tasks[overIndex].columnId) {
           tasks[activeIndex].columnId = tasks[overIndex].columnId;
+          console.log(tasks[overIndex].columnId);
+          axiosPrivate.put(`/Todo/${tasks[activeIndex].id}`, {
+            isCompleted: tasks[overIndex].columnId === "done",
+            isInProgress: tasks[overIndex].columnId === "doing",
+            dueDate: tasks[activeIndex].content.dueDate,
+            estimatedTime: tasks[activeIndex].content.estimate,
+            importance: tasks[activeIndex].content.importance,
+            title: tasks[activeIndex].content.title,
+            category: tasks[activeIndex].content.category,
+          });
           return arrayMove(tasks, activeIndex, overIndex - 1);
         }
 
@@ -259,19 +255,21 @@ function HomePage() {
 
     // Im dropping a Task over a column
     if (isActiveATask && isOverAColumn) {
+      const activeIndex = tasks.findIndex((t) => t.id === activeId);
+      const response = axiosPrivate.put(`/Todo/${tasks[activeIndex].id}`, {
+        isCompleted: overId === "done",
+        isInProgress: overId === "doing",
+        dueDate: tasks[activeIndex].content.dueDate,
+        estimatedTime: tasks[activeIndex].content.estimate,
+        importance: tasks[activeIndex].content.importance,
+        title: tasks[activeIndex].content.title,
+        category: tasks[activeIndex].content.category,
+      });
+      console.log(response);
       setTasks((tasks) => {
-        const activeIndex = tasks.findIndex((t) => t.id === activeId);
         tasks[activeIndex].columnId = overId.toString();
         tasks[activeIndex].content.progress = overId.toString();
-        axiosPrivate.put(`/Todo/${tasks[activeIndex].id}`, {
-          isCompleted: overId === "done",
-          isInProgress: overId === "doing",
-          dueDate: tasks[activeIndex].content.dueDate,
-          estimatedTime: tasks[activeIndex].content.estimate,
-          importance: tasks[activeIndex].content.importance,
-          title: tasks[activeIndex].content.title,
-          category: tasks[activeIndex].content.category,
-        });
+
         console.log("DROPPING TASK OVER COLUMN", { activeIndex });
         return arrayMove(tasks, activeIndex, activeIndex);
       });

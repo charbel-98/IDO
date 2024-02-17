@@ -1,6 +1,16 @@
 import { useState } from "react";
-
-const useInput = ({ validator, required, message }) => {
+interface UseInputProps {
+  validator: (value: string) => boolean;
+  required: boolean;
+  message: string;
+  setBackendError: React.Dispatch<React.SetStateAction<boolean>>;
+}
+const useInput = ({
+  validator,
+  required,
+  message,
+  setBackendError,
+}: UseInputProps) => {
   const [enteredValue, setEnteredValue] = useState("");
   const [isTouched, setIsTouched] = useState(false);
 
@@ -13,11 +23,12 @@ const useInput = ({ validator, required, message }) => {
     errorMessage = message;
   }
 
-  const onChange = (event) => {
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEnteredValue(event.target.value);
+    setBackendError(false);
   };
 
-  const onBlur = (event) => {
+  const onBlur = () => {
     setIsTouched(true);
   };
 
