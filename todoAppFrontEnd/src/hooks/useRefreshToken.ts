@@ -1,8 +1,7 @@
 import { useDispatch } from "react-redux";
 import axios from "../api/axios";
-import useAuth from "./useAuth";
 import { setAuth } from "../redux/auth/authSlice";
-const useRefreshToken = (controller: any) => {
+const useRefreshToken = (controller?: any) => {
   const auth = localStorage.getItem("token");
   const dispatch = useDispatch();
   const refresh = async () => {
@@ -21,7 +20,7 @@ const useRefreshToken = (controller: any) => {
     } catch (error) {
       console.log(error);
     }
-    console.log(JSON.stringify(auth));
+    // console.log(JSON.stringify(auth));
     dispatch(
       setAuth({
         accessToken: response?.data?.token,
@@ -30,7 +29,7 @@ const useRefreshToken = (controller: any) => {
     );
     //update the token in local storage
     localStorage.setItem("token", response?.data?.token);
-    console.log(response?.data?.accessToken);
+    // console.log(response?.data?.accessToken);
 
     return response?.data?.accessToken;
   };

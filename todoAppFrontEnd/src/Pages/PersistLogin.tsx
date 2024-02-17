@@ -15,7 +15,7 @@ const PersistLogin = () => {
       try {
         await refresh();
       } catch (err) {
-        console.error(err);
+        // console.error(err);
       } finally {
         isMounted && setIsLoading(false);
       }
@@ -32,8 +32,8 @@ const PersistLogin = () => {
   }, []);
 
   useEffect(() => {
-    console.log(`isLoading: ${isLoading}`);
-    console.log(`aT: ${JSON.stringify(auth)}`);
+    // console.log(`isLoading: ${isLoading}`);
+    // console.log(`aT: ${JSON.stringify(auth)}`);
   }, [isLoading]);
 
   return <>{isLoading ? <p></p> : <Outlet />}</>;

@@ -1,8 +1,6 @@
 import Container from "./tasks-children/Container";
 import { Column, TaskItem } from "../../types";
 import { InfoIcon } from "../../assets/Icons";
-import { SetStateAction } from "react";
-import { Dispatch } from "@reduxjs/toolkit";
 
 interface Props {
   columns: Column[];
@@ -28,8 +26,6 @@ function Tasks({
       {columns.map((col) => (
         <Container
           updateTask={updateTask}
-          openHeader={openHeader}
-          headerIsShowing={headerIsShowing}
           key={col.id}
           column={col}
           tasks={tasks.filter((task) => task.columnId === col.id)}

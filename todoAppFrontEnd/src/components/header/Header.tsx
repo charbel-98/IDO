@@ -17,7 +17,7 @@ interface Props {
 
 function Profile() {
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state: any) => state.auth);
   const [showProfile, setShowProfile] = useState<Boolean | null>(null);
   return (
     <div className={`${classes.profileContainer}`}>
@@ -25,7 +25,7 @@ function Profile() {
         src={avatar}
         className={`${classes.avatar}`}
         onClick={() => {
-          console.log(showProfile);
+          // console.log(showProfile);
           if (showProfile === null) return setShowProfile(true);
 
           if (showProfile || showProfile === false)
@@ -65,14 +65,20 @@ const Header = ({ setTasks, nbTasks }: Props) => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (error) {
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         dispatch(setErrorState(false));
       }, 3000);
-      setTimeout(() => {
+      const timeout2 = setTimeout(() => {
         dispatch(setError({ error: null, errorState: false }));
       }, 4000);
+
+      return () => {
+        clearTimeout(timeoutId);
+        clearTimeout(timeout2);
+      };
+
+      //after finishing the animation set the error to null
     }
-    //after finishing the animation set the error to null
   });
   return (
     <nav className={` ${classes.nav}`}>
@@ -143,7 +149,7 @@ const Header = ({ setTasks, nbTasks }: Props) => {
               dueDate: "",
               estimate: "",
               importance: "",
-              progress: "",
+              progress: "todo",
             },
           },
           ...prev,

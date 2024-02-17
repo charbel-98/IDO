@@ -85,7 +85,7 @@ namespace Controllers
             {
                 return BadRequest(new AuthResult
                 {
-                    Errors = new List<string> { "Invalid authentication request" },
+                    Errors = new List<string> { "Invalid email" },
                     Success = false
                 });
             }
@@ -95,7 +95,7 @@ namespace Controllers
             {
                 return BadRequest(new AuthResult
                 {
-                    Errors = new List<string> { "Invalid authentication request" },
+                    Errors = new List<string> { "Invalid password" },
                     Success = false
                 });
             }

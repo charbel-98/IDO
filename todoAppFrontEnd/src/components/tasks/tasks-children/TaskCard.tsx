@@ -20,38 +20,54 @@ function TaskCard({ task, updateTask, isNewCard, setTasks }: Props) {
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const Task = useMemo(() => {
-    return task;
-  }, [task]);
-  const [todoData, setTodoData] = useState({
-    title: Task.content.title,
-    IsCompleted: Task.content.progress === "done" ? true : false,
-    IsInProgress: Task.content.progress === "doing" ? true : false,
-    EstimatedTime: Task.content.estimate,
-    Importance: Task.content.importance || "High",
-    DueDate: Task.content.dueDate,
-    Category: Task.content.category,
-  });
+  const [Task, setTask] = useState(task);
+  console.log(Task);
+  const todoData = useMemo(() => {
+    return {
+      title: Task.content.title,
+      IsCompleted: Task.content.progress === "done" ? true : false,
+      IsInProgress: Task.content.progress === "doing" ? true : false,
+      EstimatedTime: Task.content.estimate,
+      Importance: Task.content.importance || "High",
+      DueDate: Task.content.dueDate,
+      Category: Task.content.category,
+    };
+  }, [Task]);
 
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     switch (e.target.name) {
       case "title":
-        setTodoData({ ...todoData, title: e.target.value });
+        setTask({
+          ...Task,
+          content: { ...Task.content, title: e.target.value },
+        });
         break;
       case "category":
-        setTodoData({ ...todoData, Category: e.target.value });
+        setTask({
+          ...Task,
+          content: { ...Task.content, category: e.target.value },
+        });
         break;
       case "dueDate":
-        setTodoData({ ...todoData, DueDate: e.target.value });
+        setTask({
+          ...Task,
+          content: { ...Task.content, dueDate: e.target.value },
+        });
         break;
       case "estimate":
-        setTodoData({ ...todoData, EstimatedTime: e.target.value });
+        setTask({
+          ...Task,
+          content: { ...Task.content, estimate: e.target.value },
+        });
         break;
     }
   };
   const selectChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    console.log(e);
-    setTodoData({ ...todoData, Importance: e.target.value });
+    // console.log(e);
+    setTask({
+      ...Task,
+      content: { ...Task.content, importance: e.target.value },
+    });
   };
   const {
     setNodeRef,
@@ -98,8 +114,9 @@ function TaskCard({ task, updateTask, isNewCard, setTasks }: Props) {
   if (isNewCard) {
     const addNewTask = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      console.log(todoData);
+      // console.log(todoData);
       try {
+        console.log("hello");
         if (Object.values(todoData).some((value) => value === "")) {
           return dispatch(
             setError({
@@ -108,8 +125,9 @@ function TaskCard({ task, updateTask, isNewCard, setTasks }: Props) {
             })
           );
         }
+        console.log("world");
         const response = await axiosPrivate.post("/Todo", todoData);
-        console.log(response.data);
+        // console.log(response.data);
         const newTask: TaskItem = {
           id: response.data.id,
           columnId: "todo",
@@ -129,7 +147,7 @@ function TaskCard({ task, updateTask, isNewCard, setTasks }: Props) {
         });
         navigate("/");
       } catch (err) {
-        console.log(err);
+        // console.log(err);
         dispatch(
           setError({
             error: "Something went wrong",
@@ -229,9 +247,9 @@ function TaskCard({ task, updateTask, isNewCard, setTasks }: Props) {
         };
         updateTask(task.id, mappedResponseData);
         toggleEditMode();
-        console.log(response.data);
+        // console.log(response.data);
       } catch (err) {
-        console.log(err);
+        // console.log(err);
         dispatch(
           setError({
             error: (err as any).response.data.message,
@@ -254,7 +272,7 @@ function TaskCard({ task, updateTask, isNewCard, setTasks }: Props) {
             <input
               onChange={changeHandler}
               name="title"
-              value={todoData.title || Task.content.title}
+              value={Task.content.title}
             />
           </div>
           <button

@@ -10,21 +10,19 @@ interface Props {
   column: Column;
   setTasks: React.Dispatch<React.SetStateAction<TaskItem[]>>;
   tasks: TaskItem[];
-  headerIsShowing: boolean;
-  openHeader: () => void;
+
   updateTask: (id: string, updatedTask: TaskItem) => void;
 }
 function Container({
   column,
   tasks,
   setTasks,
-  headerIsShowing,
-  openHeader,
+
   updateTask,
 }: Props) {
   const [editMode, setEditMode] = useState(false);
   const filter = useSelector((state: any) => state.search.search);
-  console.log(filter);
+  // console.log(filter);
   if (filter) {
     tasks = tasks.filter((task) => {
       return Object.values(task.content).some((x) =>
