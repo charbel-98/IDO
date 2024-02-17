@@ -276,16 +276,13 @@ function TaskCard({ task, updateTask, isNewCard, setTasks }: Props) {
             />
           </div>
           <button
-            className={`${classes.trashButton}`}
+            className={`${classes.trashButton} `}
             onClick={(e) => {
               e.stopPropagation();
-              const response = axiosPrivate.delete(`/Todo/${task.id}`);
-              setTasks((prev: TaskItem[]) => {
-                return prev.filter((t) => t.id !== task.id);
-              });
+              setTasks((prev) => prev);
             }}
           >
-            <BsTrash />
+            cancel
           </button>
         </div>
         <div className={`${classes.taskPropsContainer}`}>
@@ -362,10 +359,19 @@ function TaskCard({ task, updateTask, isNewCard, setTasks }: Props) {
             className={`${classes.trashButton}`}
             onClick={(e) => {
               e.stopPropagation();
-              const response = axiosPrivate.delete(`/Todo/${task.id}`);
-              setTasks((prev: TaskItem[]) => {
-                return prev.filter((t) => t.id !== task.id);
-              });
+              try {
+                axiosPrivate.delete(`/Todo/${task.id}`);
+                setTasks((prev: TaskItem[]) => {
+                  return prev.filter((t) => t.id !== task.id);
+                });
+              } catch (err) {
+                dispatch(
+                  setError({
+                    error: "Something went wrong while deleting the task",
+                    errorState: true,
+                  })
+                );
+              }
             }}
           >
             <BsTrash />
